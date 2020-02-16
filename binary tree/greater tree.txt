@@ -1,0 +1,76 @@
+/Greater Tree
+------------------------------------------------------------------------------
+
+#include <stdio.h>
+#include<stdlib.h>
+int sum=0;
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+};
+struct Node *createNewNode(int data)
+{
+    struct Node *NewNode=(struct Node *)malloc(sizeof(struct Node));
+    NewNode->data=data;
+    NewNode->left=NULL;
+    NewNode->right=NULL;
+    return NewNode;
+}
+struct Node *insert(struct Node *root,int data)
+{
+    if(root==NULL)
+    return createNewNode(data);
+    else
+    {
+        if(data>root->data)
+        {
+            root->right=insert(root->right,data);
+        }
+        else if(data<root->data)
+        {
+            root->left=insert(root->left,data);
+        }
+        else
+        printf("Insertion not possible");
+    }
+    return root;
+}
+ struct Node *convertToGT(struct Node *root)
+ {
+     if(root==NULL)
+     return root;
+     else
+     {
+         convertToGT(root->right);
+         sum=sum+root->data;
+         root->data=sum;
+         convertToGT(root->left);
+         return root;
+     }
+ }
+void inOrder(struct Node *root)
+{
+    if(root==NULL)
+    return;
+    else
+    {
+        inOrder(root->left);
+        printf("%d ",root->data);
+        inOrder(root->right);
+    }
+}
+int main() {
+struct Node *root=NULL;
+root=insert(root,10);
+root=insert(root,5);
+root=insert(root,15);
+root=insert(root,2);
+root=insert(root,8);
+root=insert(root,12);
+root=insert(root,18);
+    root=convertToGT(root);
+    inOrder(root);
+return 0;
+}

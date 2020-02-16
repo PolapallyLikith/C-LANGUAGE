@@ -1,0 +1,129 @@
+BST PROGRAM(MERGE TWO BST TREE)
+-------------------------------------------------------------------------------------------------------------
+
+#include<stdio.h>
+#include<stdlib.h>
+int sum=0;
+struct Node
+{
+    int data;
+    struct Node *left;
+    struct Node *right;
+}*root;
+struct Node* createnewnode(int data)
+{
+struct Node* newnode=(struct Node*)malloc(sizeof(struct Node));
+    newnode->left=NULL;
+    newnode->data=data;
+    newnode->right=NULL;
+    return newnode;
+}
+struct Node* ins(struct Node* root,int data)
+{
+    if(root==NULL)
+    root=createnewnode(data);
+    else
+    {
+        if(data>root->data)
+        root->right=ins(root->right,data);
+        else if(data<root->data)
+        root->left=ins(root->left,data);
+        else
+        printf("duplicate");
+    }
+    return root;
+}
+void display(struct Node* root)
+{
+    if (root==NULL)
+    {
+        return ;
+    }
+    else{
+    display(root->left);
+    printf("%d ",root->data);
+    display(root->right);
+    }
+}
+struct Node* merge(struct Node* root,struct Node* root1)
+{
+    if(root1==NULL&&root==NULL)
+    root= NULL;
+    else if(root1==NULL)
+    {}
+    else if(root==NULL)
+    root=root1;
+    else
+    {
+        root->data=root->data+root1->data;
+        root->left=merge(root->left,root1->left);
+        root->right=merge(root->right,root1->right);
+   }
+   return root;
+}
+int sumleaf(struct Node* root)
+{
+    if(root==NULL)
+    return;
+    else if(root->left==NULL&&root->right==NULL)
+    sum=sum+root->data;
+    else
+    {
+     sumleaf(root->left);
+     sumleaf(root->right);
+    }
+    return sum;
+}
+int sumoftree(struct Node* root)
+{
+    if(root==NULL)
+    return 0;
+  int sum1=sumoftree(root->left)+root->data+sumoftree(root->right);
+   return sum1;
+}
+int issumtree(struct Node* root)
+{
+    if(root==NULL)
+        return 1;
+int isleftsum=issumtree(root->left);
+int isrightsum=issumtree(root->right);
+ int leftsum=sumoftree(root->left);
+ int rightsum=sumoftree(root->right);
+if(isleftsum&&isrightsum){
+    if(root->left==NULL&&root->right==NULL)
+    return 1;
+    else if(leftsum+rightsum==root->data){
+        return 1;
+}  
+}
+return 0;
+}
+int main()
+{
+int k;
+    struct Node* root=NULL;
+    struct Node *root1=NULL;
+    root=ins(root,20);
+    root=ins(root,40);
+    root=ins(root,15);
+    root=ins(root,30);
+    root=ins(root,32);
+    root1=ins(root1,60);
+    root1=ins(root1,40);
+    root1=ins(root1,30);
+    root1=ins(root1,90);
+    root1=ins(root1,70);
+    display(root);
+    printf("\n");
+    display(root1);
+   root= merge(root,root1);
+   printf("\n");
+   display(root);
+  sum=sumleaf(root);
+ printf("\n%d",sum);
+ if(issumtree(root))
+ printf("\nsumtree");
+ else
+ printf("\nnot sumtree");
+    return 0;
+}
